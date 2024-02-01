@@ -8,9 +8,21 @@ namespace card_game_tools
 {
     internal class CardGame
     {
+        public CardPack pack;
         public CardGame()
         {
-            
+            pack = new CardPack();
+            RunGame();
+        }
+
+        public void StartGame()
+        {
+
+        }
+
+        public void Round()
+        {
+
         }
     }
 }

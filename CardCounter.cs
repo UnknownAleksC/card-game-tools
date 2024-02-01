@@ -22,17 +22,17 @@ namespace card_game_tools
     {
         private CardSystems _cardSystem;
         private int _count;
-        private int[] _cards;
+        private int[] _cardVals;
         public CardCounter(CardSystems countingSystem)
         {
             _cardSystem = countingSystem;
             _count = 0;
-            _cards = GetCardValues();
+            _cardVals = GetCardValues();
         }
 
         public void UpdateCount(int card)
         {
-            _count += _cards[card];
+            _count += _cardVals[card];
         }
 
         public int GetCount()
