@@ -5,7 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace card_game_tools
+namespace casino_game_tools
 {
     enum CardSystems
     {

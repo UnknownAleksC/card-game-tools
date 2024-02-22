@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace card_game_tools
+namespace casino_game_tools
 {
     internal class Card
     {
