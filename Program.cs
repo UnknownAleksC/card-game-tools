@@ -4,8 +4,8 @@
     {
         static void Main(string[] args)
         {
-            CardPack pack = new CardPack(4);
-            pack.Shuffle();
+            CardGame game = new CardGame();
+
         }
     }
 }

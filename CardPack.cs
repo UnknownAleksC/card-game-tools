@@ -23,13 +23,11 @@ namespace casino_game_tools
             int i = 0;
             while (i < numOfDecks)
             {
-                int maxCardVal = 13;
-                string[] cSuits = { "Heart", "Diamond", "Club", "Spade" };
-                for (int cVal = 1; cVal <= maxCardVal; cVal++)
+                foreach (CValue val in (CValue[]) Enum.GetValues(typeof(CValue)))
                 {
-                    foreach (string suit in cSuits)
+                    foreach (CSuit suit in (CSuit[])Enum.GetValues(typeof(CSuit)))
                     {
-                        _cards.Add(new Card(suit, cVal));
+                        _cards.Add(new Card(suit, val));
                     }
                 }
                 i++;

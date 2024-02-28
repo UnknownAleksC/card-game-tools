@@ -8,21 +8,23 @@ namespace casino_game_tools
 {
     internal class CardGame
     {
+        private bool _isActive;
         private CardPack _deck;
         private Dealer _dealer;
-        private Player _participant;
+        private Player _player;
 
         public CardGame()
         {
             _dealer = new Dealer();
-            _participant = new Player();
+            _player = new Player();
+            _deck = new CardPack(4);
             Game();
         }
 
         public void Game()
         {
-            bool isActive = true;
-            while (isActive)
+            _isActive = true;
+            while (_isActive)
             {
                 Round();
             }
@@ -30,15 +32,19 @@ namespace casino_game_tools
 
         public void Round()
         {
+            //Dealing cards
+            DealCards();
+            //Check cards
+            //Hit, Double or Stand
+            //
         }
 
-        public void CreateCardPack()
+        private void DealCards()
         {
-            int deckCount = -1;
-            while (deckCount is < 1 or > 5)
+            while (_dealer.Hand.Count < 2 && _player.Hand.Count < 2)
             {
-                Console.Write("Number of card decks: ");
-                deckCount = int.Parse(Console.ReadLine() ?? "-1");
+                _player.AddCard(_deck.DrawCard());
+                _dealer.AddCard(_deck.DrawCard());
             }
         }
     }

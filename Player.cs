@@ -17,7 +17,7 @@ namespace casino_game_tools
             Hand = new List<Card>();
         }
 
-        public void DrawCard(Card card)
+        public void AddCard(Card card)
         {
             Hand.Add(card);
         }
