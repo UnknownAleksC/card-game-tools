@@ -9,6 +9,7 @@ namespace casino_game_tools
     internal class Player
     {
         public string Name;
+        public int Balance;
         public List<Card> Hand { get; private set; }
 
         public Player()

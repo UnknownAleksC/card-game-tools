@@ -9,7 +9,7 @@ namespace casino_game_tools
     internal class CardPack
     {
         private int _topCard;
-        private Random _shuffler;
+        private static Random _shuffler;
         private List<Card> _cards;
         public CardPack(int n)
         {
@@ -32,6 +32,8 @@ namespace casino_game_tools
                 }
                 i++;
             }
+
+            Shuffle();
         }
 
         public void Shuffle()
