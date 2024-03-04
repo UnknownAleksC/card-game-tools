@@ -16,6 +16,7 @@ namespace casino_game_tools
         {
             Name = "Bob";
             Hand = new List<Card>();
+            Balance = 1000000;
         }
 
         public void AddCard(Card card)
