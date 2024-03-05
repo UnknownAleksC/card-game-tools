@@ -10,7 +10,7 @@ namespace casino_game_tools
     {
         public Dealer()
         {
-            Name = "Ferdinand";
+            Name = "Dealer";
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace casino_game_tools
+﻿using RandomDataGenerator.FieldOptions;
+using RandomDataGenerator.Randomizers;
+
+namespace casino_game_tools
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            CardGame game = new CardGame();
+            var game = new CardGame();
         }
     }
 }

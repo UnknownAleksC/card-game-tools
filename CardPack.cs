@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RandomDataGenerator.FieldOptions;
+using RandomDataGenerator.Randomizers;
 
 namespace casino_game_tools
 {
     internal class CardPack
     {
         private int _topCard;
-        private static Random _shuffler;
+        private FieldOptionsInteger _shuffler;
         private List<Card> _cards;
-        public CardPack(int n)
+        public CardPack(int deckAmount)
         {
-            _shuffler = new Random();
+            _shuffler = new FieldOptionsInteger();
+            _shuffler.Max = 52 * deckAmount;
+            _shuffler.Min = 0;
             _cards = new List<Card>();
-            CreateDeck(n);
+            CreateDeck(deckAmount);
         }
 
         private void CreateDeck(int numOfDecks)
@@ -40,9 +44,10 @@ namespace casino_game_tools
         {
             for (int i = 0; i < _cards.Count*4; i++)
             {
-                int card1 = _shuffler.Next(0, _cards.Count);
-                int card2 = _shuffler.Next(0, _cards.Count);
-                (_cards[card1], _cards[card2]) = (_cards[card2], _cards[card1]);
+                var randomizer = RandomizerFactory.GetRandomizer(_shuffler);
+                int? card1 = randomizer.Generate();
+                int? card2 = randomizer.Generate();
+                (_cards[(int)card1], _cards[(int)card2]) = (_cards[(int)card2], _cards[(int)card1]);
             }
 
             _topCard = 0;

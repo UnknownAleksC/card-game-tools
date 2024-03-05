@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-enum PlayerState
+enum GameState
 {
     Playing = 0,
     Lost = 1,
@@ -17,6 +17,7 @@ namespace casino_game_tools
 {
     internal class CardGame
     {
+        private GameState _gameStatus;
         private bool _isActive;
         private CardPack _deck;
         private int _dealerScore;
@@ -27,6 +28,7 @@ namespace casino_game_tools
 
         public CardGame()
         {
+            _gameStatus = GameState.Playing;
             _dealer = new Dealer();
             _player = new Player();
             _deck = new CardPack(4);
@@ -56,46 +58,53 @@ namespace casino_game_tools
 
             //Check cards
             GetScore(_player);
-            GetScore(_dealer);
 
-            Console.WriteLine("What do you want to do now?");
             if (_playerScore == 21)
             {
                 Console.Clear();
-                Console.WriteLine("You hit 21, congratulations!");
+                Console.WriteLine("You hit BlackJack, congratulations!");
                 Console.WriteLine($"You won {bjOdds}");
                 _player.Balance += bjOdds;
                 playersTurn = false;
             }
 
+            //Players turn
             while (playersTurn)
             {
+                Console.WriteLine();
+                Console.WriteLine("Please select your next action");
                 string command = Console.ReadLine();
                 if (command.ToLower() == "hit")
                 {
+                    //Player hits
                     PlayerHit();
-                    GetScore(_player);
                 } else if (command.ToLower() == "double")
                 {
+                    //Players doubles and hits
                     PlayerDouble();
-                    GetScore(_player);
-                } else if (command.ToLower() == "stand")
-                {
                     playersTurn = false;
+                }
+                else if (command.ToLower() == "stand")
+                {
+                    //Player stands
+                    playersTurn = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid command");
                 }
 
                 if (_playerScore > 21)
                 {
                     PlayerLost();
                     playersTurn = false;
+                    _gameStatus = GameState.Lost;
                 }
             }
-            //Hit, Double, Split or Stand
-            // PlayerHit();
-            // playerBet = PlayerDouble(playerBet);
-            // PlayerStand();
 
-            //
+            //Dealers turn
+
+
         }
 
         public void PlayerHit()
@@ -149,7 +158,7 @@ namespace casino_game_tools
 
         public void PlayerLost()
         {
-            Console.WriteLine("Sorry, you lost! Better luck next time.");
+            Console.WriteLine($"Sorry, you lost {_playerBet}$! Better luck next time.");
             _player.Balance -= _playerBet;
         }
     }
