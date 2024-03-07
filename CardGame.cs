@@ -35,6 +35,8 @@ namespace casino_game_tools
             _dealer = new Dealer();
             _player = new Player();
             _deck = new CardPack(4);
+
+            //Test();
             Game();
         }
 
@@ -43,11 +45,13 @@ namespace casino_game_tools
             _isActive = true;
             while (_isActive)
             {
-                //Round();
+                Console.Clear();
+                Round();
                 bool answer = true;
                 ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
                 while (keyInfo.Key != ConsoleKey.Enter)
                 {
+                    Console.Clear();
                     Console.WriteLine($"Your new balance is {_player.Balance}. Want to continue?");
                     if (keyInfo.Key == ConsoleKey.UpArrow || keyInfo.Key == ConsoleKey.DownArrow)
                         answer = !answer;
@@ -72,10 +76,8 @@ namespace casino_game_tools
                         Console.BackgroundColor = ConsoleColor.Black;
                     }
                     keyInfo = Console.ReadKey();
-                    Console.Clear();
                 }
-                if(answer) Console.WriteLine("GOOD POSITIVE!");
-                if(!answer) Console.WriteLine("GOOD NEGATIVE!");
+                _isActive = answer;
             }
         }
 
@@ -94,9 +96,10 @@ namespace casino_game_tools
 
             if (_playerScore == 21)
             {
-                Console.Clear();
+                Console.WriteLine();
                 Console.WriteLine("You hit BlackJack, congratulations!");
                 Console.WriteLine($"You won {bjOdds}");
+                Console.ReadLine();
                 _player.Balance += bjOdds;
                 _gameStatus = GameState.Won;
             }
@@ -104,29 +107,35 @@ namespace casino_game_tools
             //Players turn
             while (_gameStatus == GameState.PlayerTurn)
             {
-                Console.WriteLine();
-                Console.WriteLine("Please select your next action");
-                string command = Console.ReadLine();
-                if (command.ToLower() == "hit")
-                {
-                    //Player hits
-                    Hit(_player);
-                } else if (command.ToLower() == "double")
-                {
-                    //Players doubles and hits
-                    Double();
-                } else if (command.ToLower() == "stand")
-                {
-                    //Player stands
-                    PlayerStand();
-                } else
-                {
-                    Console.WriteLine("Invalid command");
-                }
-
                 if (_playerScore > 21)
                 {
                     PlayerLost();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Please select your next action");
+                    string command = Console.ReadLine();
+
+                    if (command.ToLower() == "hit")
+                    {
+                        //Player hits
+                        Hit(_player);
+                    }
+                    else if (command.ToLower() == "double")
+                    {
+                        //Players doubles and hits
+                        Double();
+                    }
+                    else if (command.ToLower() == "stand")
+                    {
+                        //Player stands
+                        Stand();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid command");
+                    }
                 }
             }
 
@@ -173,22 +182,30 @@ namespace casino_game_tools
             GetScore(player);
         }
 
-        public int Double()
+        public void Double()
         {
             if (_playerBet * 2 <= _player.Balance)
             {
                 Hit(_player);
-                return _playerBet * 2;
+                _playerBet *= 2;
+            }
+            else
+            {
+                Console.WriteLine("You can't double this bet!");
+                Console.ReadLine();
             }
 
-            Console.Clear();
-            Console.WriteLine("You can't double this bet!");
-            Console.ReadLine();
-            return _playerBet;
         }
 
         private void DealCards()
         {
+            _gameStatus = GameState.PlayerTurn;
+            _dealerScore = 0;
+            _playerScore = 0;
+            _player.ClearHand();
+            _dealer.ClearHand();
+
+            Console.WriteLine();
             int i = 0;
             while (i < 2)
             {
@@ -205,9 +222,14 @@ namespace casino_game_tools
             Console.WriteLine($"{player.Name}'s deck consist of the following cards:");
             foreach (Card c in player.Hand)
             {
-                Console.WriteLine(c.Value);
+                Console.WriteLine(c.Value.ToString());
                 if (hasAce && c.Value == CValue.Ace)
                     sum++;
+                else if (sum + (int)c.Value > 21 && hasAce ||
+                         sum + (int)c.Value > 21 && c.Value == CValue.Ace)
+                {
+                    sum -= 10 - (int)c.Value;
+                }
                 else sum += (int)c.Value;
                 if (c.Value == CValue.Ace) hasAce = true;
             }
@@ -222,6 +244,7 @@ namespace casino_game_tools
         {
             Console.WriteLine();
             Console.WriteLine($"Sorry, you lost {_playerBet}$! Better luck next time.");
+            Console.ReadLine();
             _player.Balance -= _playerBet;
             _gameStatus = GameState.Lost;
         }
@@ -230,6 +253,7 @@ namespace casino_game_tools
         {
             Console.WriteLine();
             Console.WriteLine($"Congratulations, you won {_playerBet*2}! Keep it up.");
+            Console.ReadLine();
             _player.Balance += _playerBet*2;
             _gameStatus = GameState.Won;
         }
@@ -238,14 +262,21 @@ namespace casino_game_tools
         {
             Console.WriteLine();
             Console.WriteLine("Seems your game ended in a draw. Better luck next time!");
+            Console.ReadLine();
             _gameStatus = GameState.Draw;
         }
 
-        public void PlayerStand()
+        public void Stand()
         {
             Console.WriteLine();
             Console.WriteLine("Dealers turn");
+            Console.ReadLine();
             _gameStatus = GameState.DealerTurn;
+        }
+
+        public void Test()
+        {
+            GetScore(_player);
         }
     }
 }

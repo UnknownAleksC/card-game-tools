@@ -25,7 +25,7 @@ namespace casino_game_tools
         static CardCounter()
         {
             _count = 0;
-            _cardVals = GetCardValues();
+            _cardVals = GetCardValues(CardSystems.HiLo);
         }
 
         public static void UpdateCount(int cVal)
@@ -33,40 +33,45 @@ namespace casino_game_tools
             _count += _cardVals[cVal];
         }
 
+        public static void ResetCount()
+        {
+            _count = 0;
+        }
+
         public static int GetCount()
         {
             return _count;
         }
 
-        private static int[] GetCardValues()
+        private static int[] GetCardValues(CardSystems i)
         {
             var cardSystems = new Dictionary<CardSystems, int[]> {
                 { CardSystems.HiLo, new int[] {
-                    -1,1,1,1,1,1,0,0,0,-1
+                    0,-1,1,1,1,1,1,0,0,0,-1
                 }},
                 { CardSystems.HiOpt1, new int[] {
-                    0,0,1,1,1,1,0,0,0,-1
+                    0,0,0,1,1,1,1,0,0,0,-1
                 }},
                 { CardSystems.HiOpt2, new int[] {
-                    0,1,1,2,2,1,1,0,0,-2
+                    0,0,1,1,2,2,1,1,0,0,-2
                 }},
                 { CardSystems.Ko, new int[] {
-                    -1,1,1,1,1,1,1,0,0,-1
+                    0,-1,1,1,1,1,1,1,0,0,-1
                 }},
                 { CardSystems.Omega2, new int[] {
-                    0,1,1,2,2,2,1,0,-1,-2
+                    0,0,1,1,2,2,2,1,0,-1,-2
                 }},
                 { CardSystems.Red7, new int[] {
-                    -1,1,1,1,1,1,1,0,0,-1
+                    0,-1,1,1,1,1,1,1,0,0,-1
                 }},
                 { CardSystems.ZenCount, new int[] {
-                    -1,1,1,2,2,2,1,0,0,-2
+                    0,-1,1,1,2,2,2,1,0,0,-2
                 }},
                 { CardSystems.TenCount, new int[] {
-                    1,1,1,1,1,1,1,1,1,-2
+                    0,1,1,1,1,1,1,1,1,1,-2
                 }}
             };
-            return cardSystems[];
+            return cardSystems[i];
         }
     }
 }

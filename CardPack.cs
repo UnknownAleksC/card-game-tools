@@ -42,15 +42,16 @@ namespace casino_game_tools
 
         public void Shuffle()
         {
+            var randomizer = RandomizerFactory.GetRandomizer(_shuffler);
             for (int i = 0; i < _cards.Count*4; i++)
             {
-                var randomizer = RandomizerFactory.GetRandomizer(_shuffler);
                 int? card1 = randomizer.Generate();
                 int? card2 = randomizer.Generate();
                 (_cards[(int)card1], _cards[(int)card2]) = (_cards[(int)card2], _cards[(int)card1]);
             }
 
             _topCard = 0;
+            CardCounter.ResetCount();
         }
 
         public Card DrawCard()
@@ -58,6 +59,7 @@ namespace casino_game_tools
             if (_topCard == _cards.Count) Shuffle();
             int n = _topCard;
             _topCard++;
+            CardCounter.UpdateCount((int)_cards[n].Value);
             return _cards[n];
         }
     }

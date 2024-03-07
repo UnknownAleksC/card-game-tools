@@ -23,5 +23,10 @@ namespace casino_game_tools
         {
             Hand.Add(card);
         }
+
+        public void ClearHand()
+        {
+            Hand.Clear();
+        }
     }
 }
