@@ -18,31 +18,29 @@ namespace casino_game_tools
         ZenCount,
         TenCount
     }
-    internal class CardCounter
+    internal static class CardCounter
     {
-        private CardSystems _cardSystem;
-        private int _count;
-        private int[] _cardVals;
-        public CardCounter(CardSystems countingSystem)
+        private static int _count;
+        private static int[] _cardVals;
+        static CardCounter()
         {
-            _cardSystem = countingSystem;
             _count = 0;
             _cardVals = GetCardValues();
         }
 
-        public void UpdateCount(int card)
+        public static void UpdateCount(int cVal)
         {
-            _count += _cardVals[card];
+            _count += _cardVals[cVal];
         }
 
-        public int GetCount()
+        public static int GetCount()
         {
             return _count;
         }
 
-        private int[] GetCardValues()
+        private static int[] GetCardValues()
         {
-            var cards = new Dictionary<CardSystems, int[]> {
+            var cardSystems = new Dictionary<CardSystems, int[]> {
                 { CardSystems.HiLo, new int[] {
                     -1,1,1,1,1,1,0,0,0,-1
                 }},
@@ -68,7 +66,7 @@ namespace casino_game_tools
                     1,1,1,1,1,1,1,1,1,-2
                 }}
             };
-            return cards[_cardSystem];
+            return cardSystems[];
         }
     }
 }
