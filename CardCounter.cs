@@ -30,7 +30,7 @@ namespace casino_game_tools
 
         public static void UpdateCount(int cVal)
         {
-            _count += _cardVals[cVal];
+            _count += _cardVals[cVal-1];
         }
 
         public static void ResetCount()

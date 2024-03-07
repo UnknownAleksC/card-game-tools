@@ -47,37 +47,7 @@ namespace casino_game_tools
             {
                 Console.Clear();
                 Round();
-                bool answer = true;
-                ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
-                while (keyInfo.Key != ConsoleKey.Enter)
-                {
-                    Console.Clear();
-                    Console.WriteLine($"Your new balance is {_player.Balance}. Want to continue?");
-                    if (keyInfo.Key == ConsoleKey.UpArrow || keyInfo.Key == ConsoleKey.DownArrow)
-                        answer = !answer;
-                    if (answer)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.BackgroundColor = ConsoleColor.White;
-                        Console.WriteLine("Yes");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.Write("No");
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.WriteLine("Yes");
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.BackgroundColor = ConsoleColor.White;
-                        Console.Write("No");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.Black;
-                    }
-                    keyInfo = Console.ReadKey();
-                }
-                _isActive = answer;
+                Interlude();
             }
         }
 
@@ -107,35 +77,33 @@ namespace casino_game_tools
             //Players turn
             while (_gameStatus == GameState.PlayerTurn)
             {
-                if (_playerScore > 21)
+                Console.WriteLine();
+                Console.WriteLine("Please select your next action");
+                string command = Console.ReadLine();
+
+                if (command.ToLower() == "hit")
                 {
-                    PlayerLost();
+                    //Player hits
+                    Hit(_player);
+                }
+                else if (command.ToLower() == "double")
+                {
+                    //Players doubles and hits
+                    Double();
+                }
+                else if (command.ToLower() == "stand")
+                {
+                    //Player stands
+                    Stand();
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Please select your next action");
-                    string command = Console.ReadLine();
+                    Console.WriteLine("Invalid command");
 
-                    if (command.ToLower() == "hit")
-                    {
-                        //Player hits
-                        Hit(_player);
-                    }
-                    else if (command.ToLower() == "double")
-                    {
-                        //Players doubles and hits
-                        Double();
-                    }
-                    else if (command.ToLower() == "stand")
-                    {
-                        //Player stands
-                        Stand();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid command");
-                    }
+                }
+                if (_playerScore > 21)
+                {
+                    PlayerLost();
                 }
             }
 
@@ -143,6 +111,8 @@ namespace casino_game_tools
             //Check Dealers hand
             if (_gameStatus == GameState.DealerTurn)
             {
+                Console.WriteLine();
+                Console.WriteLine("Dealers turn:");
                 GetScore(_dealer);
                 while (_gameStatus == GameState.DealerTurn)
                 {
@@ -174,6 +144,41 @@ namespace casino_game_tools
             }
         }
 
+        public void Interlude()
+        {
+            bool answer = true;
+            ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
+            while (keyInfo.Key != ConsoleKey.Enter)
+            {
+                Console.Clear();
+                Console.WriteLine($"Your new balance is {_player.Balance}. Want to continue?");
+                if (keyInfo.Key == ConsoleKey.UpArrow || keyInfo.Key == ConsoleKey.DownArrow)
+                    answer = !answer;
+                if (answer)
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.WriteLine("Yes");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.Write("No");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.WriteLine("Yes");
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write("No");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+                keyInfo = Console.ReadKey();
+            }
+            _isActive = answer;
+        }
+
         public void Hit(Player player)
         {
             Console.WriteLine();
@@ -184,10 +189,11 @@ namespace casino_game_tools
 
         public void Double()
         {
-            if (_playerBet * 2 <= _player.Balance)
+            if (_playerBet * 2 <= _player.Balance && _player.Hand.Count == 2)
             {
                 Hit(_player);
                 _playerBet *= 2;
+                _gameStatus = GameState.DealerTurn;
             }
             else
             {
