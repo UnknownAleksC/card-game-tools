@@ -42,6 +42,7 @@ namespace casino_game_tools
 
         public void Game()
         {
+            Introduction();
             _isActive = true;
             while (_isActive)
             {
@@ -51,9 +52,19 @@ namespace casino_game_tools
             }
         }
 
+        public void Introduction()
+        {
+            Console.Clear();
+            Console.WriteLine("Hello and welcome to Blackjack with card counting!");
+            Console.Write("To get started, just press Enter.");
+            Console.ReadLine();
+            Console.Clear();
+        }
+
         public void Round()
         {
             //Inserting bet
+            Console.WriteLine($"Your current balance is {_player.Balance}");
             Console.WriteLine("Please insert bet:");
             _playerBet = Int32.Parse(Console.ReadLine());
             int bjOdds = _playerBet + (_playerBet * 3 / 2);
@@ -61,9 +72,7 @@ namespace casino_game_tools
             //Dealing cards
             DealCards();
 
-            //Check cards
-            GetScore(_player);
-
+            //Check hand for 21
             if (_playerScore == 21)
             {
                 Console.WriteLine();
@@ -116,7 +125,7 @@ namespace casino_game_tools
                 GetScore(_dealer);
                 while (_gameStatus == GameState.DealerTurn)
                 {
-                    Console.ReadLine();
+                    Console.Read();
                     if (_dealerScore > 21)
                     {
                         PlayerWon();
@@ -206,10 +215,6 @@ namespace casino_game_tools
         private void DealCards()
         {
             _gameStatus = GameState.PlayerTurn;
-            _dealerScore = 0;
-            _playerScore = 0;
-            _player.ClearHand();
-            _dealer.ClearHand();
 
             Console.WriteLine();
             int i = 0;
@@ -219,6 +224,8 @@ namespace casino_game_tools
                 _dealer.AddCard(_deck.DrawCard());
                 i++;
             }
+
+            GetScore(_player);
         }
 
         private void GetScore(Player player)
@@ -244,6 +251,8 @@ namespace casino_game_tools
             else _playerScore = sum;
 
             Console.WriteLine($"This gives a total value of {sum}");
+            Console.WriteLine($"Your card counter is currently at {CardCounter.GetCount()}");
+            if (_gameStatus == GameState.PlayerTurn) Console.WriteLine($"Dealers first card is {_dealer.Hand.First().Value}.");
         }
 
         public void PlayerLost()
@@ -253,6 +262,7 @@ namespace casino_game_tools
             Console.ReadLine();
             _player.Balance -= _playerBet;
             _gameStatus = GameState.Lost;
+            Reset();
         }
 
         public void PlayerWon()
@@ -262,6 +272,7 @@ namespace casino_game_tools
             Console.ReadLine();
             _player.Balance += _playerBet*2;
             _gameStatus = GameState.Won;
+            Reset();
         }
 
         public void PlayerDraw()
@@ -270,6 +281,7 @@ namespace casino_game_tools
             Console.WriteLine("Seems your game ended in a draw. Better luck next time!");
             Console.ReadLine();
             _gameStatus = GameState.Draw;
+            Reset();
         }
 
         public void Stand()
@@ -278,6 +290,14 @@ namespace casino_game_tools
             Console.WriteLine("Dealers turn");
             Console.ReadLine();
             _gameStatus = GameState.DealerTurn;
+        }
+
+        public void Reset()
+        {
+            _dealerScore = 0;
+            _playerScore = 0;
+            _player.ClearHand();
+            _dealer.ClearHand();
         }
 
         public void Test()

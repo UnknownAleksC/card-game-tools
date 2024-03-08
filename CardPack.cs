@@ -52,6 +52,8 @@ namespace casino_game_tools
 
             _topCard = 0;
             CardCounter.ResetCount();
+            Console.WriteLine();
+            Console.WriteLine("The deck has been shuffled and the card counter reset.");
         }
 
         public Card DrawCard()

@@ -30,7 +30,8 @@ namespace casino_game_tools
 
         public static void UpdateCount(int cVal)
         {
-            _count += _cardVals[cVal-1];
+            int i = cVal - 2; // I do -2 because the dictionary seeks from 0, while the values start at 2
+            _count += _cardVals[i];
         }
 
         public static void ResetCount()
@@ -45,30 +46,31 @@ namespace casino_game_tools
 
         private static int[] GetCardValues(CardSystems i)
         {
+            // Value order -> 2,3,4,5,6,7,8,9,10/J/Q/K,Ace
             var cardSystems = new Dictionary<CardSystems, int[]> {
                 { CardSystems.HiLo, new int[] {
-                    0,-1,1,1,1,1,1,0,0,0,-1
+                    1,1,1,1,1,0,0,0,-1,-1
                 }},
                 { CardSystems.HiOpt1, new int[] {
-                    0,0,0,1,1,1,1,0,0,0,-1
+                    0,1,1,1,1,0,0,0,-1,0
                 }},
                 { CardSystems.HiOpt2, new int[] {
-                    0,0,1,1,2,2,1,1,0,0,-2
+                    1,1,2,2,1,1,0,0,-2,0
                 }},
                 { CardSystems.Ko, new int[] {
-                    0,-1,1,1,1,1,1,1,0,0,-1
+                    1,1,1,1,1,1,0,0,-1,-1
                 }},
                 { CardSystems.Omega2, new int[] {
-                    0,0,1,1,2,2,2,1,0,-1,-2
+                    1,1,2,2,2,1,0,-1,-2,0
                 }},
                 { CardSystems.Red7, new int[] {
-                    0,-1,1,1,1,1,1,1,0,0,-1
+                    1,1,1,1,1,1,0,0,-1,-1
                 }},
                 { CardSystems.ZenCount, new int[] {
-                    0,-1,1,1,2,2,2,1,0,0,-2
+                    1,1,2,2,2,1,0,0,-2,-1
                 }},
                 { CardSystems.TenCount, new int[] {
-                    0,1,1,1,1,1,1,1,1,1,-2
+                    1,1,1,1,1,1,1,1,-2,1
                 }}
             };
             return cardSystems[i];
