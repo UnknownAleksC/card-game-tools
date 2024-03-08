@@ -260,6 +260,7 @@ namespace casino_game_tools
             Console.WriteLine();
             Console.WriteLine($"Sorry, you lost {_playerBet}$! Better luck next time.");
             Console.ReadLine();
+            Console.Clear();
             _player.Balance -= _playerBet;
             _gameStatus = GameState.Lost;
             Reset();
@@ -270,6 +271,7 @@ namespace casino_game_tools
             Console.WriteLine();
             Console.WriteLine($"Congratulations, you won {_playerBet*2}! Keep it up.");
             Console.ReadLine();
+            Console.Clear();
             _player.Balance += _playerBet*2;
             _gameStatus = GameState.Won;
             Reset();
@@ -280,6 +282,7 @@ namespace casino_game_tools
             Console.WriteLine();
             Console.WriteLine("Seems your game ended in a draw. Better luck next time!");
             Console.ReadLine();
+            Console.Clear();
             _gameStatus = GameState.Draw;
             Reset();
         }
